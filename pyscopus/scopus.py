@@ -51,7 +51,7 @@ class Scopus(object):
 
 
         if type(count) is not int:
-            raise ValueError("%s is not a valid input for the number of entries to return." %number)
+            raise ValueError("%s is not a valid input for the number of entries to return." %count)
 
         result_df, total_count = _search_scopus(self.apikey, query, type_, view=view)
 
@@ -66,8 +66,7 @@ class Scopus(object):
         i = 1
         while True:
             index = 25*i
-            result_df = result_df.append(_search_scopus(self.apikey, query, type_, view=view, index=index),
-                                         ignore_index=True)
+            result_df = pd.concat([result_df, _search_scopus(self.apikey, query, type_, view=view, index=index)])
             if result_df.shape[0] >= count:
                 return result_df[:count]
             i += 1
